@@ -1,0 +1,10 @@
+Ciao ${name}, da dove iniziamo oggi?
+Buongiorno ${name} cosa vogliamo ripassare?
+`Ciao ${name}, quale argomento affrontiamo?`
+`Ehi ${name}, cosa rivediamo insieme?`
+`Buongiorno ${name}, quale lezione tocchiamo oggi?`
+`Ciao ${name}, cosa ti va di studiare ora?`
+`Buongiorno ${name}, quale tema apriamo?`
+`Ehi ${name}, cosa mi spieghi oggi?`
+`Ciao ${name}, quale parte riprendiamo?`
+`Buongiorno ${name}, da cosa partiamo oggi?`
