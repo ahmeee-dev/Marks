@@ -1,10 +1,10 @@
-package com.ahmeee_dev.web_serv;
+package com.ahmeee.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WebServApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
