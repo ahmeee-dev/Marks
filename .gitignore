@@ -1,0 +1,85 @@
+# --------------------
+# General and OS
+# --------------------
+.DS_Store
+.env
+.idea/
+.vscode/
+
+# --------------------
+# Java / Spring Boot (Backend)
+# --------------------
+# Compiled class files
+*.class
+
+# Log files
+*.log
+logs/
+
+# Maven/Gradle
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# IDE specific files
+.metadata
+!.gitignore
+/bin/
+
+# Spring Boot-specific
+/build/
+/out/
+
+# Database files
+*.db
+*.sqlite
+/data/
+
+# --------------------
+# React Native / Expo (Frontend)
+# --------------------
+/node_modules
+/android
+/ios
+/web-build
+.expo/
+# Expo Go cache and build files
+.expo-shared/
+app.json
+expo-shared.json
+npm-debug.*
+yarn-error.*
+.packager/
+metro.config.js.orig
+# Build artifacts
+/dist/
+/temp/
+
+# --------------------
+# Docker
+# --------------------
+# Ignore Docker build context
+.dockerignore
+
+# Generated files like volumes
+docker-compose.override.yml
+docker-compose.local.yml
+
+# --------------------
+# Environment/Secrets (Crucial for API Keys)
+# --------------------
+# Configuration files with secrets
+application.properties
+application-dev.properties
+application-prod.properties
+
+# IMPORTANT: Remove secrets file if present and use environment variables
+/secrets/
