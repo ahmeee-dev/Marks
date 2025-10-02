@@ -24,4 +24,5 @@ public class MyUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Couldn't find user " + username);
 		return new UserPrincipal(user);
 	}
+
 }

@@ -70,6 +70,15 @@ public class JWTService {
 	}
 
 	public boolean validateToken(String token, UserDetails userDetails) {
-		return true;
+		final String username = userDetails.getUsername();
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	}
+
+	private boolean isTokenExpired(String token) {
+		return extractExpiration(token).before(new Date());
+	}
+
+	private Date extractExpiration(String token) {
+		return extractClaim(token, Claims::getExpiration);
 	}
 }
