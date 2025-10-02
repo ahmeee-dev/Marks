@@ -12,7 +12,7 @@ import ahmeee.serverside.repository.UserRepo;
 
 
 @Service
-public class myUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserRepo repo;
