@@ -1,6 +1,3 @@
-Certamente\! Ecco il **README.md** tecnico, formattato in **Markdown**, pronto per essere incollato. Ho usato intestazioni per strutturare chiaramente le sezioni.
-
-````markdown
 # Marks – Technical README
 
 *L'applicazione è in fase attiva di sviluppo. Questo Readme si basa sulla versione finale desiderata.*
@@ -176,6 +173,3 @@ Siamo aperti a suggerimenti e proposte.
 ## Licenza
 
 **Uso privato consentito.** Non è permessa la rivendita o lo sfruttamento commerciale senza autorizzazione.
-
-```
-```
