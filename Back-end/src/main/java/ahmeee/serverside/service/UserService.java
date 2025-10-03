@@ -13,6 +13,9 @@ import ahmeee.serverside.repository.UserRepo;
 @Service
 public class UserService {
 	
+	final int HOUR = 60 * 60 * 1000;
+	final int YEAR = 365 * 24 * 60 * 60 * 1000;
+
 	@Autowired
 	private UserRepo repo;
 
@@ -33,7 +36,7 @@ public class UserService {
 	public String verify(Users user) {
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		if (auth.isAuthenticated())
-			return jwtService.generateToken(user.getUsername());
+			return jwtService.generateToken(user.getUsername(), 1 * HOUR);
 		return "Login failed";
 	}
 }

@@ -32,7 +32,7 @@ public class JWTService {
 		} catch (NoSuchAlgorithmException err) { System.err.println("Error: " + err.getMessage()); }
 	}
 	
-	public String generateToken(String username) {
+	public String generateToken(String username, int expirationTime) {
 		Map<String, Object> claims = new HashMap<>();
 
 		return Jwts.builder()
@@ -40,7 +40,7 @@ public class JWTService {
 		.add(claims)
 		.subject(username)
 		.issuedAt(new Date(System.currentTimeMillis()))
-		.expiration(new Date(System.currentTimeMillis() + 6000 * 60 * 10))
+		.expiration(new Date(System.currentTimeMillis() + expirationTime))
 		.and()
 		.signWith(getKey())
 		.compact();
