@@ -42,8 +42,6 @@ public class UserService {
 		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			return ("Bad request");
 		String token = authHeader.substring(7);
-
-		System.out.println("ninna \n\n\n" + jwtService.extractUsername(token));
 		UserDetails userDetails = myUserDetailsService.loadUserByUsername(jwtService.extractUsername(token));
 		if (jwtService.validateToken(token, userDetails)) {
 			return ("Successful login by Refresh Token");
