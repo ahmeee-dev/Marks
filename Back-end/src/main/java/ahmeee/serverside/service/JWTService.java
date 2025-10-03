@@ -1,18 +1,19 @@
 package ahmeee.serverside.service;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import ahmeee.serverside.model.Users;
+import ahmeee.serverside.repository.UserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -21,16 +22,11 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JWTService {
 
+	@Autowired
+	private UserRepo repo;
 
-	private String secretKey = "";
-
-	public JWTService() {
-		try {
-			KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-			SecretKey sk = keyGen.generateKey();
-			secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-		} catch (NoSuchAlgorithmException err) { System.err.println("Error: " + err.getMessage()); }
-	}
+	@Value("${jwt.secret}")
+	private String secretKey;
 	
 	public String generateToken(String username, int expirationTime) {
 		Map<String, Object> claims = new HashMap<>();
@@ -46,7 +42,6 @@ public class JWTService {
 		.compact();
 
 	}
-
 
 	private SecretKey getKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -71,7 +66,7 @@ public class JWTService {
 
 	public boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlackListed(username));
 	}
 
 	private boolean isTokenExpired(String token) {
@@ -80,5 +75,10 @@ public class JWTService {
 
 	private Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
+	}
+
+	private boolean isTokenBlackListed(String username) {
+		Users user = repo.findByUsername(username);
+		return user.isBlacklisted();
 	}
 }
