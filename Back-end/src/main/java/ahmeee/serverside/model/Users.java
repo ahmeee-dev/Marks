@@ -17,6 +17,7 @@ public class Users {
 	private String password;
 	private String name;
 	private String refreshToken;
+	private boolean blacklisted;
 	private String deviceId;
 	private Date expiresAt;
 	
@@ -49,6 +50,10 @@ public class Users {
         this.name = name;
     }
 
+	public void setBlacklisted(boolean value) {
+        this.blacklisted = value;
+    }
+
 	public Long getId() {
 		return this.id;
 	}
@@ -76,5 +81,11 @@ public class Users {
     public String getName() {
         return name;
     }
+
+    public boolean isBlacklisted() {
+        return blacklisted;
+    }
+
+   
 
 }
