@@ -86,3 +86,5 @@ Next steps di sviluppo:
 ## Contributi
 
 Suggerimenti e proposte sono ben accetti! Chiunque voglia contribuire può proporre idee o aprire discussioni tramite **issue**.
+
+*Io, sviluppatore dell'applicazione mi dichiaro contro ogni forma di oppressione e sterminio, senza giustificazione alcuna. Chiunque ritenga opinabile la possibilità alla vita e alla dignità è pregato di non utilizzare il Marks in quanto non ben gradito*
