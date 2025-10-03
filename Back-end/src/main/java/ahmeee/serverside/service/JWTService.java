@@ -7,13 +7,10 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import ahmeee.serverside.model.Users;
-import ahmeee.serverside.repository.UserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -22,8 +19,6 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JWTService {
 
-	@Autowired
-	private UserRepo repo;
 
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -66,7 +61,7 @@ public class JWTService {
 
 	public boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlackListed(username));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
 	private boolean isTokenExpired(String token) {
@@ -75,10 +70,5 @@ public class JWTService {
 
 	private Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
-	}
-
-	private boolean isTokenBlackListed(String username) {
-		Users user = repo.findByUsername(username);
-		return user.isBlacklisted();
 	}
 }

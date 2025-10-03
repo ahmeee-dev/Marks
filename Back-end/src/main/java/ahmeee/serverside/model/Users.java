@@ -2,6 +2,8 @@ package ahmeee.serverside.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,9 +18,12 @@ public class Users {
 	private String username;
 	private String password;
 	private String name;
+	@JsonProperty("refresh_token")
 	private String refreshToken;
 	private boolean blacklisted;
+	@JsonProperty("device_id")
 	private String deviceId;
+	@JsonProperty("expires_at")
 	private Date expiresAt;
 	
 

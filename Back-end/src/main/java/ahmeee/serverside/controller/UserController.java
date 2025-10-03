@@ -21,8 +21,8 @@ public class UserController {
 	}
 
 	@PostMapping("/token_login")
-	public String tokenLogin(@RequestHeader("Authorization") String authHeader) {
-		return service.verifyToken(authHeader);
+	public String tokenLogin(@RequestHeader("Authorization") String authHeader, @RequestHeader("device_id") String deviceId) {
+		return service.verifyToken(authHeader, deviceId);
 	}
 
 	@PostMapping("/register")
