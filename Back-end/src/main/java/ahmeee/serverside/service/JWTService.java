@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import ahmeee.serverside.model.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -23,13 +24,13 @@ public class JWTService {
 	@Value("${jwt.secret}")
 	private String secretKey;
 	
-	public String generateToken(String username, int expirationTime) {
+	public String generateToken(Users user, long expirationTime) {
 		Map<String, Object> claims = new HashMap<>();
-
+		claims.put("device_id", user.getDeviceId());
 		return Jwts.builder()
 		.claims()
 		.add(claims)
-		.subject(username)
+		.subject(user.getUsername())
 		.issuedAt(new Date(System.currentTimeMillis()))
 		.expiration(new Date(System.currentTimeMillis() + expirationTime))
 		.and()

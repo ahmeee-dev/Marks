@@ -1,9 +1,5 @@
 package ahmeee.serverside.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,9 +13,9 @@ import ahmeee.serverside.repository.UserRepo;
 
 @Service
 public class UserService {
-	
-	final int HOUR = 60 * 60 * 1000;
-	final int MONTH = 30 * 24 * 60 * 60 * 1000;
+
+	final long HOUR = 60L * 60 * 1000;
+	final long MONTH = 30L * 24 * 60 * 60 * 1000;
 
 	@Autowired
 	private UserRepo repo;
@@ -35,23 +31,25 @@ public class UserService {
 
 	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
+	//still to check if username or email is already taken,
 	public String register(Users user) {
 		user.setPassword(encoder.encode(user.getPassword()));
-		user.setRefreshToken(jwtService.generateToken(user.getUsername(), 3 * MONTH));
-		user.setExpiresAt(Date.from(LocalDateTime.now().plusYears(10).atZone(ZoneId.systemDefault()).toInstant()));
-		System.out.print(user.getDeviceId());
+		user.setRefreshToken(jwtService.generateToken(user, 3 * MONTH));
 		repo.save(user);
 		return user.getRefreshToken();
 	}
 
+	//TODO: Verify token device id and device_id - check blacklist - check if < 20 dd from exp and in case gen new tkn
 	public String verifyToken(String authHeader, String deviceId) {
 		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			return ("Bad request");
 		String token = authHeader.substring(7);
-		Users user = repo.findByUsername(jwtService.extractUsername(token));
-		UserDetails userDetails = myUserDetailsService.loadUserByUsername(jwtService.extractUsername(token));
-		if (user.getUsername().equals(jwtService.extractUsername(token))
-				&& jwtService.validateToken(token, userDetails)
+		String username = jwtService.extractUsername(token);
+
+		Users user = repo.findByUsername(username);
+		UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
+		
+		if (jwtService.validateToken(token, userDetails)
 				&& user.getDeviceId().equals(deviceId)
 				&& !user.isBlacklisted()) {
 					return ("Successful login by Refresh Token");
@@ -61,6 +59,7 @@ public class UserService {
 
 
 	//function is called by frontend only if token is missing, generate a new token and give it back to user
+	//TODO : verify if it's correct
 	public String verify(Users user) {
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		Users existingUser = repo.findByUsername(user.getUsername());
@@ -68,8 +67,7 @@ public class UserService {
 				&& !repo.findByUsername(user.getUsername()).isBlacklisted()) {
 
 			existingUser.setPassword(encoder.encode(user.getPassword()));
-			existingUser.setRefreshToken(jwtService.generateToken(user.getUsername(), 3 * MONTH));
-			existingUser.setExpiresAt(Date.from(LocalDateTime.now().plusYears(10).atZone(ZoneId.systemDefault()).toInstant()));
+			existingUser.setRefreshToken(jwtService.generateToken(existingUser, 3 * MONTH));
 			existingUser.setDeviceId(user.getDeviceId());
 			repo.save(existingUser);
 			return "OK";

@@ -1,7 +1,5 @@
 package ahmeee.serverside.model;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
@@ -15,6 +13,7 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String email;
 	private String username;
 	private String password;
 	private String name;
@@ -23,13 +22,15 @@ public class Users {
 	private boolean blacklisted;
 	@JsonProperty("device_id")
 	private String deviceId;
-	@JsonProperty("expires_at")
-	private Date expiresAt;
 	
 
 	// public void setId(int id) {
 	// 	this.id = id;
 	// }
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
@@ -45,10 +46,6 @@ public class Users {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public void setExpiresAt(Date expiration) {
-		this.expiresAt = expiration;
 	}
 
 	public void setName(String name) {
@@ -79,10 +76,6 @@ public class Users {
 		return this.password;
 	}
 
-    public Date getExpiresAt() {
-        return expiresAt;
-    }
-
     public String getName() {
         return name;
     }
@@ -90,6 +83,10 @@ public class Users {
     public boolean isBlacklisted() {
         return blacklisted;
     }
+
+	public String getEmail() {
+		return email;
+	}
 
    
 
