@@ -41,7 +41,6 @@ public class SecurityConfig {
 	}
 
 	
-	@SuppressWarnings("unused")
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
