@@ -48,6 +48,10 @@ public class JWTService {
 		return extractClaim(token, Claims::getSubject);
 	}
 
+	public String extractDeviceId(String token) {
+		return extractClaim(token, claims -> claims.get("device_id", String.class));
+	}
+
 	private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
 		final Claims claims = extractAllClaims(token);
 		return claimsResolver.apply(claims);
