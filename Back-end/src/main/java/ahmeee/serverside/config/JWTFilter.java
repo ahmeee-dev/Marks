@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.service.JWTService;
 import ahmeee.serverside.service.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -40,7 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
-			if (jwtService.validateToken(token, userDetails)) {
+			if (jwtService.validateToken(token, (UserPrincipal)userDetails)) {
 				UsernamePasswordAuthenticationToken authToken = 
 					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

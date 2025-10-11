@@ -25,19 +25,34 @@ public class UserPrincipal implements UserDetails {
 		return user.getPassword();
 	}
 
+	public String getDeviceId() {
+		return user.getDeviceId();
+	}
+
+	public String getToken() {
+		return user.getRefreshToken();
+	}
+
+	public boolean  isBlacklisted() {
+		return user.isBlacklisted();
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singleton(new SimpleGrantedAuthority("USER"));
 	}
 	
-
+	//TODO: implement
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	//TODO: implement
 	@Override
 	public boolean isEnabled() {
 		return true;
 	}
+
+
 }

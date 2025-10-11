@@ -1,5 +1,6 @@
 package ahmeee.serverside.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +9,10 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.stereotype.Service;
 
+import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.model.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -64,16 +66,26 @@ public class JWTService {
 			.getPayload();
 	}
 
-	public boolean validateToken(String token, UserDetails userDetails) {
+	public boolean validateToken(String token, UserPrincipal userPrincipal) {
 		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
+		return (username.equals(userPrincipal.getUsername())
+			&& !isTokenExpired(token)
+			&& extractDeviceId(token).equals(userPrincipal.getDeviceId()));
 	}
 
 	private boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
 
-	private Date extractExpiration(String token) {
+	public Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
+	}
+
+	public boolean isTokenExpiredAfter(String token, int days) {
+		Date expirationDate = extractExpiration(token);
+		Date now = new Date();
+		long difference = (expirationDate.getTime() - now.getTime())/(24 * 60 * 60* 1000);
+		return (difference < days);
 	}
 }
