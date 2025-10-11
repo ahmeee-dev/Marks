@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +45,16 @@ public class UserService {
 	}
 
 	//Verifies request device id and user entity device_id - check blacklist
-	//TODO; check if 'dd from exp'< 20, in case gen new tkn
 	public String verifyToken(String authHeader, String deviceId) {
 		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			return ("Bad request");
 		String token = authHeader.substring(7);
 		String username = jwtService.extractUsername(token);
 
-		UserPrincipal userPrincipal = (UserPrincipal)myUserDetailsService.loadUserByUsername(username);
+		UserPrincipal userPrincipal = null;
+		try {
+			userPrincipal = (UserPrincipal) myUserDetailsService.loadUserByUsername(username);
+		} catch (UsernameNotFoundException err) { return "User not found"; }
 		
 		if (jwtService.validateToken(token, userPrincipal)
 				&& userPrincipal.getDeviceId().equals(deviceId)
@@ -65,24 +68,26 @@ public class UserService {
 					}
 					return ("Successful login by Refresh Token");
 		}
-		return ("Error");
+		return ("Send to login");
 	}
 
 
 	//function is called by frontend only if token is missing, generate a new token and give it back to user
 	//TODO : verify if it's correct
 	public String verify(Users user) {
-		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-		Users existingUser = repo.findByUsername(user.getUsername());
-		if (auth.isAuthenticated()
-				&& !repo.findByUsername(user.getUsername()).isBlacklisted()) {
 
-			existingUser.setPassword(encoder.encode(user.getPassword()));
-			existingUser.setRefreshToken(jwtService.generateToken(existingUser, 3 * MONTH));
-			existingUser.setDeviceId(user.getDeviceId());
-			repo.save(existingUser);
-			return "OK";
+		UserPrincipal userPrincipal = null;
+		try {
+			userPrincipal = (UserPrincipal) myUserDetailsService.loadUserByUsername(user.getUsername());
+		} catch (UsernameNotFoundException err) { return "User not found"; }
+
+		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(userPrincipal.getUsername(), userPrincipal.getPassword()));
+		if (auth.isAuthenticated() && !userPrincipal.isBlacklisted()) {
+			user.setRefreshToken(jwtService.generateToken(user, 3 * MONTH));
+			user.setDeviceId(user.getDeviceId());
+			repo.save(user);
+			return "Login Successful, new JWT generated";
 		}
-		return "Login failed";
+		return "Incorrect Credentials";
 	}
 }
