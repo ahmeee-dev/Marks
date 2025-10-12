@@ -72,7 +72,7 @@ public class UserService {
 	}
 
 
-	//function is called by frontend only if token is missing, generate a new token and give it back to user
+	//function is called by client only if token is missing, generate a new token and give it back to user
 	//TODO : verify if it's correct
 	public String verify(Users user) {
 
@@ -81,11 +81,12 @@ public class UserService {
 			userPrincipal = (UserPrincipal) myUserDetailsService.loadUserByUsername(user.getUsername());
 		} catch (UsernameNotFoundException err) { return "User not found"; }
 
-		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(userPrincipal.getUsername(), userPrincipal.getPassword()));
+		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		if (auth.isAuthenticated() && !userPrincipal.isBlacklisted()) {
-			user.setRefreshToken(jwtService.generateToken(user, 3 * MONTH));
-			user.setDeviceId(user.getDeviceId());
-			repo.save(user);
+			Users existingUser = repo.findByUsername(user.getUsername());
+			existingUser.setDeviceId(user.getDeviceId());
+			existingUser.setRefreshToken(jwtService.generateToken(existingUser, 3 * MONTH));
+			repo.save(existingUser);
 			return "Login Successful, new JWT generated";
 		}
 		return "Incorrect Credentials";

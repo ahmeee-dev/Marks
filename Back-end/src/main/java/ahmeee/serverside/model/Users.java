@@ -22,8 +22,7 @@ public class Users {
 	private boolean blacklisted;
 	@JsonProperty("device_id")
 	private String deviceId;
-	
-
+	//eyJhbGciOiJIUzM4NCJ9.eyJkZXZpY2VfaWQiOiJpcGhvbmUiLCJzdWIiOiJhaG1lZWUiLCJpYXQiOjE3NjAyNzg5NjgsImV4cCI6MTc2ODA1NDk2OH0.5HNVDVrtPeWWidfV5ie8eikDX6unend5P8Ui8H0mVD7zVamty-OLsGgZEGxyeS-d
 	// public void setId(int id) {
 	// 	this.id = id;
 	// }
