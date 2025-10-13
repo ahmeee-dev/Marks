@@ -34,14 +34,15 @@ public class UserService {
 
 	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-	//TODO: check if username or email is already taken,
+	//TODO: check if username or email is already taken
 	public String register(Users user) {
 		if (user == null)
 			return ("Bad request");
 		user.setPassword(encoder.encode(user.getPassword()));
 		user.setRefreshToken(jwtService.generateToken(user, TOKEN_VALIDITY * MONTH));
+		String newSecret = user.setNewSecret();
 		repo.save(user);
-		return user.getRefreshToken();
+		return newSecret;
 	}
 
 	//Verifies request device id and user entity device_id - check blacklist
@@ -74,6 +75,7 @@ public class UserService {
 
 	//function is called by client only if token is missing, generate a new token and give it back to user
 	//TODO : verify if it's correct
+	// generate new secret key
 	public String verify(Users user) {
 
 		UserPrincipal userPrincipal = null;
@@ -86,8 +88,9 @@ public class UserService {
 			Users existingUser = repo.findByUsername(user.getUsername());
 			existingUser.setDeviceId(user.getDeviceId());
 			existingUser.setRefreshToken(jwtService.generateToken(existingUser, 3 * MONTH));
+			String newSecret = existingUser.setNewSecret();
 			repo.save(existingUser);
-			return "Login Successful, new JWT generated";
+			return newSecret;
 		}
 		return "Incorrect Credentials";
 	}
