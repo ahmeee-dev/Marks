@@ -1,6 +1,5 @@
 package ahmeee.serverside.service;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import ahmeee.serverside.model.UserPrincipal;

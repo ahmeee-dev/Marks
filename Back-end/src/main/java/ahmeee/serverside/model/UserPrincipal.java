@@ -37,6 +37,10 @@ public class UserPrincipal implements UserDetails {
 		return user.isBlacklisted();
 	}
 
+	public String getSecret() {
+		return user.getSecret();
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singleton(new SimpleGrantedAuthority("USER"));
