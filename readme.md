@@ -76,8 +76,8 @@ Un ringraziamento speciale a **Telusko**, per i corsi introduttivi e di approfon
 
 Next steps di sviluppo:
 
-1.  Aggiunta del sistmema di Refresh Token e Device ID per Unique Device Limit.
-2.  Implementazione dell’infrastruttura completa.
+1.  Implementazione di Redis per ridurre il carico dato al DB.
+2.  Implementazione dell’infrastruttura Docker.
 3.  Aggiunta delle funzionalità principali di simulazione e feedback.
 4.  Sviluppo dell’interfaccia frontend.
 

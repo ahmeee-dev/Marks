@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ahmeee.serverside.model.UserPrincipal;
-import ahmeee.serverside.repository.UserRepo;
 import ahmeee.serverside.utils.SignatureUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -15,18 +14,14 @@ public class RequestService {
 	
 	@Autowired
 	private MyUserDetailsService myUserDetials;
-	@Autowired
-	private UserRepo userRepo;
-	@Autowired
-	private SignatureUtils signatureUtils;
 
 	public boolean isValid(Map<String, String> header, String body, HttpServletRequest request) {
-		String signature = header.get("X-signature");
+		String signature = header.get("X-Signature");
 		String method = request.getMethod();
 		String path = request.getRequestURI();
-		String deviceId = header.get("X-header");
-		String username = header.get("X-username");
-		Long timestamp = Long.valueOf(header.get("X-timestamp"));
+		String deviceId = header.get("X-DeviceId");
+		String username = header.get("X-Username");
+		Long timestamp = Long.valueOf(header.get("X-Timestamp"));
 		UserPrincipal userPrincipal = (UserPrincipal)myUserDetials.loadUserByUsername(username);
 
 		if (userPrincipal == null) { return false; }
@@ -42,7 +37,9 @@ public class RequestService {
 
 
 	private boolean isTimeValid(Long requestTimeStamp) {
+		if (requestTimeStamp == null)
+			return false;
 		Long now = System.currentTimeMillis()/1000;
-		return ((now - requestTimeStamp) < 60);
+		return (Math.abs((now - requestTimeStamp)) < 60);
 	}
 }

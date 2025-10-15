@@ -31,7 +31,7 @@ public class SecurityConfig {
 		return (
 			httpSecurity.csrf(customizer -> customizer.disable()) //disables CSRF
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("register", "login", "token_login").permitAll()
+				.requestMatchers("/register", "/login", "/token_login").permitAll()
 				.anyRequest().authenticated()) //unauthorize any access without logs
 			.httpBasic(Customizer.withDefaults()) //enable it for access outside browsers
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //makes the session stateless, every request will need credentials 
