@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.repository.UserRepo;
-import ahmeee.serverside.utils.Signature;
+import ahmeee.serverside.utils.SignatureUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
@@ -18,7 +18,7 @@ public class RequestService {
 	@Autowired
 	private UserRepo userRepo;
 	@Autowired
-	private Signature signature;
+	private SignatureUtils signatureUtils;
 
 	public boolean isValid(Map<String, String> header, String body, HttpServletRequest request) {
 		String signature = header.get("X-signature");
@@ -35,8 +35,9 @@ public class RequestService {
 		
 		String userSecret = userPrincipal.getSecret();
 		String canonicalString = method + "\n" + path + "\n" + username + "\n" + deviceId + "\n" + timestamp + "\n" + body;
-		String expectedSignature = Signature.generateSignature(userPrincipal.getSecret(), canonicalString);
-		return true;
+		String expectedSignature = SignatureUtils.generateSignature(userSecret, canonicalString);
+
+		return (expectedSignature.equals(signature));
 	}
 
 
