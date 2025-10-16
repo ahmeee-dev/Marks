@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.utils.SignatureUtils;
@@ -15,7 +16,7 @@ public class RequestService {
 	@Autowired
 	private MyUserDetailsService myUserDetials;
 
-	public boolean isValid(Map<String, String> header, String body, HttpServletRequest request) {
+	public boolean isAuthentic(Map<String, String> header, RequestBody body, HttpServletRequest request) {
 		String signature = header.get("X-Signature");
 		String method = request.getMethod();
 		String path = request.getRequestURI();

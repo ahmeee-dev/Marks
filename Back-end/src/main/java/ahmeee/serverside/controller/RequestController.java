@@ -18,9 +18,11 @@ public class RequestController {
 	private RequestService service;
 
 	@PostMapping("/start_interrogation")
-	public String interrogation(@RequestHeader Map<String, String> header, @RequestBody String body, HttpServletRequest request) {
-		if (!service.isValid(header, body, request))
-			return "Invalid request";
+	public String interrogation(@RequestHeader Map<String, String> header, @RequestBody RequestBody body, HttpServletRequest request) {
+		if (!service.isAuthentic(header, body, request))
+			return "Fake request";
+		//if (service.isValid((CreateInterrogation)body))
+		//	return "Invalid request";
 		return "request accepted";
 	}
 }
