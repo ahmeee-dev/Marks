@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-    public class CreateInterrogationRequest {
+    public class InterrogationRequest {
 
         @NotNull
         @JsonProperty("text_attributes")
@@ -21,7 +21,7 @@ import jakarta.validation.constraints.PositiveOrZero;
         @NotNull
         private Settings settings;
 
-        public CreateInterrogationRequest() {}
+        public InterrogationRequest() {}
 
         public TextAttributes getTextAttributes() {
             return textAttributes;

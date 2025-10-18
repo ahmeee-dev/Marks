@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import ahmeee.serverside.model.UserPrincipal;
+import ahmeee.serverside.model.response.ApiResponse;
+import ahmeee.serverside.model.response.InterrogationResponse;
 import ahmeee.serverside.utils.SignatureUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,7 +18,10 @@ public class RequestService {
 	@Autowired
 	private MyUserDetailsService myUserDetials;
 
-	public boolean isAuthentic(Map<String, String> header, RequestBody body, HttpServletRequest request) {
+	@Autowired
+	private InterrogationService interrogationService;
+
+	public boolean isAuthentic(Map<String, String> header, String body, HttpServletRequest request) {
 		String signature = header.get("X-Signature");
 		String method = request.getMethod();
 		String path = request.getRequestURI();
@@ -36,11 +41,25 @@ public class RequestService {
 		return (expectedSignature.equals(signature));
 	}
 
-
 	private boolean isTimeValid(Long requestTimeStamp) {
 		if (requestTimeStamp == null)
 			return false;
 		Long now = System.currentTimeMillis()/1000;
 		return (Math.abs((now - requestTimeStamp)) < 60);
+	}
+
+	public ApiResponse<InterrogationResponse> handleInterrogation(String requestBody) {
+		InterrogationResponse interrogationResponse = interrogationService.handleInterrogation(requestBody);
+		ApiResponse<InterrogationResponse> apiResponse = new ApiResponse<>();
+		if (interrogationResponse == null) {
+			apiResponse.setData(null);
+			apiResponse.setStatus(400);
+			apiResponse.setMessage("unable to process request");
+			return apiResponse;
+		}
+		apiResponse.setStatus(200);
+		apiResponse.setMessage("successful request");
+		apiResponse.setData(interrogationResponse);
+		return apiResponse;
 	}
 }

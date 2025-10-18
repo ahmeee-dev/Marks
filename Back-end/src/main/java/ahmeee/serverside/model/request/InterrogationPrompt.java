@@ -8,20 +8,20 @@ public class InterrogationPrompt {
     private String expectedOutput;
     private String inputStructure; // opzionale: per descrivere struttura JSON input
     private String outputRules;    // opzionale: regole di formattazione output
-	private CreateInterrogationRequest createInterrogationRequest;
+	private InterrogationRequest createInterrogationRequest;
 
-    public CreateInterrogationRequest getCreateInterrogationRequest() {
+    public InterrogationRequest getCreateInterrogationRequest() {
 		return createInterrogationRequest;
 	}
 
-	public void setCreateInterrogationRequest(CreateInterrogationRequest createInterrogationRequest) {
+	public void setCreateInterrogationRequest(InterrogationRequest createInterrogationRequest) {
 		this.createInterrogationRequest = createInterrogationRequest;
 	}
 
 	public InterrogationPrompt() {}
 
     public InterrogationPrompt(String language, String task, String context, String expectedOutput,
-                         String inputStructure, String outputRules, CreateInterrogationRequest createInterrogationRequest) {
+                         String inputStructure, String outputRules, InterrogationRequest createInterrogationRequest) {
         this.language = language;
         this.task = task;
         this.context = context;
@@ -50,7 +50,7 @@ public class InterrogationPrompt {
     public String getOutputRules() { return outputRules; }
     public void setOutputRules(String outputRules) { this.outputRules = outputRules; }
 
-    public static InterrogationPrompt createInterrogationPrompt(CreateInterrogationRequest createInterrogationRequest) {
+    public static InterrogationPrompt createInterrogationPrompt(InterrogationRequest createInterrogationRequest) {
         String language = "italian";
         String task = "Analizza porzioni di interrogazioni orali e valuta la qualità.";
         String context = """
