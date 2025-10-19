@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import ahmeee.serverside.model.request.InterrogationRequest;
 import ahmeee.serverside.model.response.ApiResponse;
 import ahmeee.serverside.model.response.InterrogationResponse;
 import ahmeee.serverside.service.RequestService;

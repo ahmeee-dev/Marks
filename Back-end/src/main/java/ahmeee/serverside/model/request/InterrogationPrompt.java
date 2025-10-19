@@ -57,6 +57,7 @@ public class InterrogationPrompt {
 Sei un modello linguistico che analizza porzioni di interrogazioni orali di studenti in lingua italiana.
 Riceverai informazioni che descrivono il contesto dell’interrogazione e la porzione attuale da valutare.
 Il tuo compito è analizzare il contenuto ricevuto e restituire **esclusivamente** un oggetto JSON conforme alla struttura specificata.
+Rispondi esclusivamente con l’oggetto JSON, senza aggiungere backticks o formattazione Markdown.
 """;
         String expectedOutput = """
 {

@@ -78,7 +78,7 @@ public class UserService {
 	// generate new secret key
 	public String verify(Users user) {
 
-		UserPrincipal userPrincipal = null;
+		UserPrincipal userPrincipal;
 		try {
 			userPrincipal = (UserPrincipal) myUserDetailsService.loadUserByUsername(user.getUsername());
 		} catch (UsernameNotFoundException err) { return "User not found"; }

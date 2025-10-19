@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.model.response.ApiResponse;
@@ -22,21 +21,26 @@ public class RequestService {
 	private InterrogationService interrogationService;
 
 	public boolean isAuthentic(Map<String, String> header, String body, HttpServletRequest request) {
-		String signature = header.get("X-Signature");
+		String signature = header.get("x-signature");
 		String method = request.getMethod();
 		String path = request.getRequestURI();
-		String deviceId = header.get("X-DeviceId");
-		String username = header.get("X-Username");
-		Long timestamp = Long.valueOf(header.get("X-Timestamp"));
+		String deviceId = header.get("x-deviceid");
+		String username = header.get("x-username");
+		Long timestamp = Long.valueOf(header.get("x-timestamp"));
 		UserPrincipal userPrincipal = (UserPrincipal)myUserDetials.loadUserByUsername(username);
 
 		if (userPrincipal == null) { return false; }
-		if (!isTimeValid(timestamp)) { return false; }
-		if (signature == null || deviceId == null || username == null) { return false; }
+		else if (!isTimeValid(timestamp)) { return false; }
+		else if (signature == null || deviceId == null || username == null) { return false; }
 		
 		String userSecret = userPrincipal.getSecret();
 		String canonicalString = method + "\n" + path + "\n" + username + "\n" + deviceId + "\n" + timestamp + "\n" + body;
+		System.out.println("canonical: " + canonicalString);
 		String expectedSignature = SignatureUtils.generateSignature(userSecret, canonicalString);
+
+		System.out.println(path);
+		System.out.println("generated signature: " + expectedSignature);
+		System.out.println("python signature: " + signature);
 
 		return (expectedSignature.equals(signature));
 	}
