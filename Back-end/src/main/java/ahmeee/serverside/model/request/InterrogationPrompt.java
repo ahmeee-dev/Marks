@@ -63,7 +63,7 @@ Rispondi esclusivamente con l’oggetto JSON, senza aggiungere backticks o forma
 {
     "cutoff": "Porzione di contenuto interrotta o incompleta da integrare nella prossima richiesta. Se non c’è alcuna interruzione, lascia stringa vuota.",
     "grade": "Voto numerico da 4 a 10 che valuta la validità complessiva della risposta in relazione alla difficoltà prevista.",
-    "wrong_part": "Campo opzionale. Inseriscilo solo se il voto è minore di 7. Sintetizza in massimo 7 parole cosa è errato o come migliorare la risposta. Per difficoltà alte valuta anche la precisione terminologica; per difficoltà basse sii più tollerante.",
+    "annotations": "Campo opzionale. Inseriscilo solo se il voto è minore di 7. Sintetizza in massimo 7 parole cosa è errato o come migliorare la risposta. Per difficoltà alte valuta anche la precisione terminologica; per difficoltà basse sii più tollerante.",
     "synthesis": "Sintesi proporzionata e fluida che integri la sintesi precedente con il nuovo contenuto analizzato, mantenendo coerenza e continuità."
 }
 """;
