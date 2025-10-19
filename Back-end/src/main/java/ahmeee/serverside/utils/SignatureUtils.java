@@ -1,5 +1,7 @@
 package ahmeee.serverside.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import javax.crypto.Mac;
@@ -16,6 +18,6 @@ public class SignatureUtils {
 
 			byte[] rawHmac = mac.doFinal(canonicalString.getBytes("UTF-8"));
 			return Base64.getEncoder().encodeToString(rawHmac);
-		} catch (Exception err) {throw new RuntimeException();  }
+		} catch (IllegalStateException | UnsupportedEncodingException | java.security.InvalidKeyException | NoSuchAlgorithmException err) {throw new RuntimeException();  }
 	}
 }
