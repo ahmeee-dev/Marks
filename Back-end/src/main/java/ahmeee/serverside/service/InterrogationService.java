@@ -34,9 +34,14 @@ public class InterrogationService {
 			System.out.println("\n\n\n" + apiKey + "\n\n\n");
 			GenerateContentResponse response = client.models.generateContent(MODEL, prompt,null);
 			String outputString = response.text();
+			outputString = outputString
+			.replaceAll("(?s)```json", "")
+			.replaceAll("(?s)```", "")
+			.trim();
 			System.out.println(outputString);
 			InterrogationResponse outputJson = mapper.readValue(outputString, InterrogationResponse.class);
 
+			
 			return outputJson;
 		} catch (JsonProcessingException err) { System.out.print("RRAAAAHHH" + err.getMessage()); return null; }
 	}
