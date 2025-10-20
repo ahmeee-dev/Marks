@@ -68,7 +68,7 @@ Il software è disponibile per **uso privato e personale** da parte degli svilup
 
 ## Crediti
 
-Un ringraziamento speciale a **Telusko**, per i corsi introduttivi e di approfondimento su YouTube che hanno contribuito in maniera significativa alla crescita del progetto.
+Un ringraziamento speciale a **Telusko**, per i corsi introduttivi e di approfondimento su YouTube che hanno contribuito in maniera significativa alla crescita del progetto, in particolare per i protocolli di sicurezza.
 
 ---
 

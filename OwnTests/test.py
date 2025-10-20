@@ -13,10 +13,10 @@ secret = "50fd29a7-4ba7-45f4-af5f-a3d9cab3acffebd0fbc9-628e-4a05-883c-9172ab9d3b
 
 body_json = {
     "text_attributes": {
-        "argument": "argomento di esempio",
-        "synthesis": "sintesi di esempio",
-        "trimmed": "testo ridotto di esempio",
-        "content": "contenuto principale"
+ 		"argument": "Il Romanticismo europeo e italiano",
+        "synthesis": "Lo studente ha spiegato l'origine del Romanticismo in Germania, citando Goethe e Schiller, e ha accennato alla diffusione del movimento in Italia.",
+        "trimmed": "…dove gli autori cercarono di conciliare l'idealismo romantico con la tradizione classica italiana, mostrando un interesse crescente per il sentimento e la soggettività individuale",
+        "content": "In Italia il Romanticismo si sviluppò in un contesto politico e culturale particolare, segnato dal desiderio di indipendenza nazionale e dal confronto con l'eredità del Neoclassicismo. Manzoni, ad esempio, rappresenta una figura centrale: nelle sue opere, come 'I Promessi Sposi', combina l'attenzione al vero storico con un profondo senso morale e religioso. Leopardi, invece, pur condividendo alcuni temi romantici come l'infinito e la tensione verso l'assoluto, ne offre una visione più pessimistica, riflettendo sulla condizione umana e sull'inevitabile infelicità dell'uomo moderno. Anche Foscolo può essere letto come autore di transizione, poiché nelle sue opere emergono tanto elementi neoclassici quanto anticipazioni romantiche, soprattutto nel modo in cui esprime il legame tra memoria, patria e sentimento individuale. Successivamente il duca"
     },
     "grade_attributes": {
         "grade": 7,
