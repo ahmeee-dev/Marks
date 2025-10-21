@@ -14,27 +14,29 @@ export default function loginPage() {
 	const [password, setPassword] = useState("");
 
 	async function login(username: string, password: string) {
-		if (username == "" || password == "")
-			return;
-		const response = await fetch('http://192.168.1.11:8080/login', {
-			method: 'POST',
-			headers: {
-				"Content-type": "application/json"
-			},
-			body: JSON.stringify({username, password, device_id: "iphone"}),
-		})
-		//this part will work as soon as the server answer is formatted to have  device_id, token and secret
-		//.then((response) => response.json())
-		//.then((data) => { setStoredValue("username", username)
-		//				setStoredValue("device_id", data.device_id)
-		//				setStoredValue("token", data.token)
-		//				setStoredValue("secret", data.secret)
-		//})
-		//.catch((error) => console.error(error));
-		const text = await response.text()
-		console.log(text);
-		router.replace('/interrogation');
+		if (!username || !password) return;
+	
+		try {
+			const response = await fetch('http://192.168.1.11:8080/login', {
+				method: 'POST',
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ username, password, device_id: "iphone" }),
+			});
+	
+			const data = await response.json();
+	
+			await setStoredValue("username", username);
+			await setStoredValue("device_id", String(data.data.device_id));
+			await setStoredValue("token", String(data.data.token));
+			await setStoredValue("secret", String(data.data.secret));
+	
+			console.log(JSON.stringify(data));
+			router.replace('/interrogation');
+		} catch (error) {
+			console.error(error);
+		}
 	}
+	
 
 	return (
 		//implementa tutto
