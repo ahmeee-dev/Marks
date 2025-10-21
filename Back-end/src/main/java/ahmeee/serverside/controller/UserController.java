@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import ahmeee.serverside.model.Users;
+import ahmeee.serverside.model.response.ApiResponse;
+import ahmeee.serverside.model.response.LoginResponse;
 import ahmeee.serverside.service.UserService;
 
 @RestController
@@ -16,8 +18,19 @@ public class UserController {
 	UserService service;
 
 	@PostMapping("/login")
-	public String login(@RequestBody Users user) {
-		return service.verify(user);
+	public ApiResponse<LoginResponse> login(@RequestBody Users user) {
+		ApiResponse<LoginResponse> apiResponse = new ApiResponse<>();
+		LoginResponse loginResponse = service.login(user);
+		if (loginResponse == null){
+			apiResponse.setStatus(400);
+			apiResponse.setMessage("No bro, didn't go");
+			apiResponse.setData(null);
+		}
+		apiResponse.setStatus(200);
+		apiResponse.setMessage("apposto");
+		apiResponse.setData(loginResponse);
+		return apiResponse;
+
 	}
 
 	@PostMapping("/token_login")

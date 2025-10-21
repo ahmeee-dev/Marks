@@ -8,8 +8,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.model.Users;
+import ahmeee.serverside.model.request.InterrogationRequest;
+import ahmeee.serverside.model.response.InterrogationResponse;
+import ahmeee.serverside.model.response.LoginResponse;
 import ahmeee.serverside.repository.UserRepo;
 
 @Service
@@ -72,27 +77,25 @@ public class UserService {
 		return ("Send to login");
 	}
 
-
-	//function is called by client only if token is missing, generate a new token and give it back to user
-	//TODO : verify if it's correct
-	// generate new secret key
-	public String verify(Users user) {
+	public LoginResponse login(Users user) {
 
 		UserPrincipal userPrincipal;
 		try {
 			userPrincipal = (UserPrincipal) myUserDetailsService.loadUserByUsername(user.getUsername());
-		} catch (UsernameNotFoundException err) { return "User not found"; }
+		} catch (UsernameNotFoundException err) { return null; }
 
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		if (auth.isAuthenticated() && !userPrincipal.isBlacklisted()) {
 			Users existingUser = repo.findByUsername(user.getUsername());
 			existingUser.setDeviceId(user.getDeviceId());
-			existingUser.setRefreshToken(jwtService.generateToken(existingUser, 3 * MONTH));
+			String token = jwtService.generateToken(existingUser, 3 * MONTH);
+			existingUser.setRefreshToken(token);
 			String newSecret = existingUser.setNewSecret();
 			repo.save(existingUser);
-			return newSecret;
-			//gli va mandato il token
+
+			LoginResponse loginResponse = new LoginResponse(existingUser.getRefreshToken(), token, newSecret);
+			return loginResponse;
 		}
-		return "Incorrect Credentials";
+		return null;
 	}
 }
