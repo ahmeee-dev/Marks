@@ -2,9 +2,11 @@ import { View, Text } from "react-native";
 import { getStoredValue } from "@/utils/secureStore";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 
 export default function Interrogation() {
+	const router = useRouter();
 	const [token, setToken] = useState<string | null>(null);
 	const [username, setUsername] = useState<string | null>(null);
 	const [device_id, setDevice_id] = useState<string | null>(null);
@@ -20,7 +22,7 @@ export default function Interrogation() {
 		loadValues();
 		// TODO: ADD:  || login unsuccessful
 		if (token == null || username == null || device_id == null || secret == null) {
-			// login || register
+			router.replace('/login');
 		}
 	}, []);
 	return (

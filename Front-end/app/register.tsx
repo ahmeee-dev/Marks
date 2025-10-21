@@ -1,11 +1,22 @@
 import { setStoredValue, getStoredValue } from "@/utils/secureStore";
+import { Button } from "react-native";
+import { useState } from "react";
+import { TextInput } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function registerPage() {
 
 //genera un device ID
+
+	const [email, setEmail] = useState("");
+	const [useranem, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
 	function registerUser(email: string, username: string, password: string, name: string) {
-		fetch('http://localhost:8080/login', {
+		if (email == "" || username == "" || password == "" || name == "")
+			return;
+		fetch('http://192.168.1.11:8080/register', {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
@@ -21,7 +32,14 @@ export default function registerPage() {
 		.catch((error) => console.error(error));
 	}
 
-	//implementa UX/UI
+	return (
+		<SafeAreaView>
+			<TextInput placeholder="usename" onChangeText={setUsername}/>
+			<TextInput placeholder="email" onChangeText={setEmail} keyboardType="email-address"/>
+			<TextInput placeholder="password" onChangeText={setPassword} secureTextEntry/>
+			<Button title="register" onPress={()=> registerUser}/>
+		</SafeAreaView>
+	)
 
 
 }
