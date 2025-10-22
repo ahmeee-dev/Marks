@@ -13,24 +13,54 @@ export default function Interrogation() {
 	const [secret, setSecret] = useState<string | null>(null);
 
 	useEffect(() => {
-		async function loadValues() {
-			setToken(await getStoredValue("token"));
-			setUsername(await getStoredValue("username"));
-			setDevice_id(await getStoredValue("device_id"));
-			setSecret(await getStoredValue("secret"));
+		async function tokenLogin() {
+			const t = await getStoredValue("token");
+			const u = await getStoredValue("username");
+			const d = await getStoredValue("device_id");
+			const s = await getStoredValue("secret");
+	
+			if (t == null || u == null || d == null || s == null)
+				return false;
+
+			try {
+				const response = fetch('http://192.168.1.11:8080/token_login', {
+					method: 'POST',
+					//I'm supposed to send the device id saved in the keystore but I'm sending 2 times the token, TO-FIX
+					headers: {
+						"Authorization": `Bearer ${t}`,
+						"x-device_id": "iphone"
+					},
+					body: null
+				}).then((response) => {if (response.status != 400) 
+					{ return false}})
+				.catch((error) => console.error())
+
+			} catch (error) {
+				console.error(error);
+				return error;
+			}
+	
+			setToken(t);
+			setUsername(u);
+			setDevice_id(d);
+			setSecret(s);
+
+			return true;
 		}
-		loadValues();
-		// TODO: ADD:  || login unsuccessful
-		if (token == null || username == null || device_id == null || secret == null) {
-			router.replace('/login');
-		}
+	
+		tokenLogin().then((auth) => {
+			if (!auth) {
+				router.replace('/login');
+			}
+		});
 	}, []);
+	
 	return (
 		<SafeAreaView>
-			<Text>{token}</Text>
-			<Text>{username}</Text>
-			<Text>{device_id}</Text>
-			<Text>{secret}</Text>
+			<Text>token: {token}</Text>
+			<Text>username: {username}</Text>
+			<Text>device id: {device_id}</Text>
+			<Text>secret: {secret}</Text>
 		</SafeAreaView>
 	);
 }

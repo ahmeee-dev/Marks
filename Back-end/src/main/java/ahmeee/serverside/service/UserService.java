@@ -8,12 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.model.Users;
-import ahmeee.serverside.model.request.InterrogationRequest;
-import ahmeee.serverside.model.response.InterrogationResponse;
 import ahmeee.serverside.model.response.LoginResponse;
 import ahmeee.serverside.repository.UserRepo;
 
@@ -52,6 +48,7 @@ public class UserService {
 
 	//Verifies request device id and user entity device_id - check blacklist
 	public String verifyToken(String authHeader, String deviceId) {
+		System.out.println("yo wassup");
 		if (authHeader == null || !authHeader.startsWith("Bearer "))
 			return ("Bad request");
 		String token = authHeader.substring(7);
@@ -72,6 +69,7 @@ public class UserService {
 						repo.save(user);
 						return ("User updated succesfully");
 					}
+					System.out.println("this nigga is real");
 					return ("Successful login by Refresh Token");
 		}
 		return ("Send to login");

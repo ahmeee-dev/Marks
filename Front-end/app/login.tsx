@@ -17,7 +17,7 @@ export default function loginPage() {
 		if (!username || !password) return;
 	
 		try {
-			const response = await fetch('http://192.168.1.11:8080/login', {
+			const response = await fetch(',', {
 				method: 'POST',
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password, device_id: "iphone" }),
@@ -39,7 +39,6 @@ export default function loginPage() {
 	
 
 	return (
-		//implementa tutto
 		<SafeAreaView>
 			<TextInput value={username} onChangeText={setUsername} placeholder="Username"/>
 			<TextInput value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry/>
