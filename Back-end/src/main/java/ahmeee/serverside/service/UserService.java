@@ -91,7 +91,7 @@ public class UserService {
 			String newSecret = existingUser.setNewSecret();
 			repo.save(existingUser);
 
-			LoginResponse loginResponse = new LoginResponse(existingUser.getRefreshToken(), token, newSecret);
+			LoginResponse loginResponse = new LoginResponse(existingUser.getDeviceId(), token, newSecret);
 			return loginResponse;
 		}
 		return null;

@@ -49,9 +49,9 @@ export default function Interrogation() {
 		}
 	
 		tokenLogin().then((auth) => {
-			if (!auth) {
+			//if (!auth) {
 				router.replace('/login');
-			}
+		//	}
 		});
 	}, []);
 	

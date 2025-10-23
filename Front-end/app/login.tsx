@@ -17,7 +17,7 @@ export default function loginPage() {
 		if (!username || !password) return;
 	
 		try {
-			const response = await fetch(',', {
+			const response = await fetch('http://192.168.1.11:8080/login', {
 				method: 'POST',
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password, device_id: "iphone" }),
