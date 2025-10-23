@@ -37,7 +37,6 @@ public class UserController {
 	public String tokenLogin(@RequestHeader("Authorization") String authHeader, @RequestHeader("x-device_id") String deviceId) {
 		System.out.println("this nigga came in");
 		String answer = service.verifyToken(authHeader, deviceId);
-		System.out.println(answer);
 		return answer;
 	}
 
@@ -54,6 +53,7 @@ public class UserController {
 		apiResponse.setStatus(200);
 		apiResponse.setMessage("apposto");
 		apiResponse.setData(registrationResponse);
+
 		return apiResponse;
 
 	}

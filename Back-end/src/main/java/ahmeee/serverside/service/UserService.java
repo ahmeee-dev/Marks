@@ -42,12 +42,14 @@ public class UserService {
 		if (user == null)
 			return (null);
 		user.setPassword(encoder.encode(user.getPassword()));
-		String token = jwtService.generateToken(user, TOKEN_VALIDITY * MONTH);
-		user.setRefreshToken(token);
+		
 		String newSecret = user.setNewSecret();
 		String deviceId = UUID.randomUUID().toString();
 		user.setDeviceId(deviceId);
+		String token = jwtService.generateToken(user, TOKEN_VALIDITY * MONTH);
+		user.setRefreshToken(token);
 		repo.save(user);
+
 		LoginResponse loginResponse = new LoginResponse(deviceId, token, newSecret);
 		return loginResponse;
 	}
@@ -91,11 +93,11 @@ public class UserService {
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		if (auth.isAuthenticated() && !userPrincipal.isBlacklisted()) {
 			Users existingUser = repo.findByUsername(user.getUsername());
-			String token = jwtService.generateToken(existingUser, 3 * MONTH);
-			existingUser.setRefreshToken(token);
 			String newSecret = existingUser.setNewSecret();
 			String deviceId = UUID.randomUUID().toString();
 			existingUser.setDeviceId(deviceId);
+			String token = jwtService.generateToken(existingUser, 3 * MONTH);
+			existingUser.setRefreshToken(token);
 			repo.save(existingUser);
 
 			LoginResponse loginResponse = new LoginResponse(deviceId, token, newSecret);

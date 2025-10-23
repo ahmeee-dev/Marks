@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 
 export default function Interrogation() {
 	const router = useRouter();
+	const [loading, setLoading] = useState(true);
 	const [token, setToken] = useState<string | null>(null);
 	const [username, setUsername] = useState<string | null>(null);
 	const [device_id, setDevice_id] = useState<string | null>(null);
@@ -14,53 +15,65 @@ export default function Interrogation() {
 
 	useEffect(() => {
 		async function tokenLogin() {
+
+			//router.replace('/login');
+
 			const t = await getStoredValue("token");
 			const u = await getStoredValue("username");
 			const d = await getStoredValue("device_id");
 			const s = await getStoredValue("secret");
 	
+			
 			if (t == null || u == null || d == null || s == null)
 				return false;
 
+			console.log("\n\n\n " + t + "\n\n\n ");
 			try {
-				const response = fetch('http://192.168.1.11:8080/token_login', {
+				const response = await fetch('http://192.168.1.11:8080/token_login', {
 					method: 'POST',
-					//I'm supposed to send the device id saved in the keystore but I'm sending 2 times the token, TO-FIX
 					headers: {
 						"Authorization": `Bearer ${t}`,
-						"x-device_id": "iphone"
+						"x-device_id": `${d}`
 					},
-					body: null
-				}).then((response) => {if (response.status != 400) 
-					{ return false}})
-				.catch((error) => console.error())
+				});
+			
+				if (response.status != 200) {
+					return false;
+				}
+			
+				setToken(t);
+				setUsername(u);
+				setDevice_id(d);
+				setSecret(s);
 
+				return true;
 			} catch (error) {
 				console.error(error);
-				return error;
+				return false;
+			} finally {
+				setLoading(false);
 			}
-	
-			setToken(t);
-			setUsername(u);
-			setDevice_id(d);
-			setSecret(s);
 
-			return true;
 		}
-	
-		tokenLogin().then((auth) => {
-			//if (!auth) {
+
+		tokenLogin().then(auth => {
+			if (!auth) {
 				router.replace('/login');
-			//}
+			}
 		});
 	}, []);
 	
 	return (
 		<SafeAreaView>
-			<Text>token: {token}</Text>
-			<Text>username: {username}</Text>
-			<Text>device id: {device_id}</Text>
-			<Text>secret: {secret}</Text>
+			{loading ? 
+				(<Text>Caricamento...</Text> ) : 
+				(<>
+				<Text>token: {token}</Text>
+				<Text>username: {username}</Text>
+				<Text>device id: {device_id}</Text>
+				<Text>secret: {secret}</Text>
+				</>
+			)}
 		</SafeAreaView>
 	);
 }
@@ -90,3 +103,6 @@ body_json = {
     }
 }
 	*/
+
+
+
