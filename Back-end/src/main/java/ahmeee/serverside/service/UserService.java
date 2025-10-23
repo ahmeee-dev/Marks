@@ -1,5 +1,7 @@
 package ahmeee.serverside.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,14 +38,18 @@ public class UserService {
 	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 	//TODO: check if username or email is already taken
-	public String register(Users user) {
+	public LoginResponse register(Users user) {
 		if (user == null)
-			return ("Bad request");
+			return (null);
 		user.setPassword(encoder.encode(user.getPassword()));
-		user.setRefreshToken(jwtService.generateToken(user, TOKEN_VALIDITY * MONTH));
+		String token = jwtService.generateToken(user, TOKEN_VALIDITY * MONTH);
+		user.setRefreshToken(token);
 		String newSecret = user.setNewSecret();
+		String deviceId = UUID.randomUUID().toString();
+		user.setDeviceId(deviceId);
 		repo.save(user);
-		return newSecret;
+		LoginResponse loginResponse = new LoginResponse(deviceId, token, newSecret);
+		return loginResponse;
 	}
 
 	//Verifies request device id and user entity device_id - check blacklist
@@ -85,13 +91,14 @@ public class UserService {
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		if (auth.isAuthenticated() && !userPrincipal.isBlacklisted()) {
 			Users existingUser = repo.findByUsername(user.getUsername());
-			existingUser.setDeviceId(user.getDeviceId());
 			String token = jwtService.generateToken(existingUser, 3 * MONTH);
 			existingUser.setRefreshToken(token);
 			String newSecret = existingUser.setNewSecret();
+			String deviceId = UUID.randomUUID().toString();
+			existingUser.setDeviceId(deviceId);
 			repo.save(existingUser);
 
-			LoginResponse loginResponse = new LoginResponse(existingUser.getDeviceId(), token, newSecret);
+			LoginResponse loginResponse = new LoginResponse(deviceId, token, newSecret);
 			return loginResponse;
 		}
 		return null;

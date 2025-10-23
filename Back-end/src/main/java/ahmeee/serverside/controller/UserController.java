@@ -42,8 +42,20 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public String register(@RequestBody Users user) {
-		return service.register(user);
+	public ApiResponse<LoginResponse> register(@RequestBody Users user) {
+
+		ApiResponse<LoginResponse> apiResponse = new ApiResponse<>();
+		LoginResponse registrationResponse = service.register(user);
+		if (registrationResponse == null){
+			apiResponse.setStatus(400);
+			apiResponse.setMessage("No bro, didn't go");
+			apiResponse.setData(null);
+		}
+		apiResponse.setStatus(200);
+		apiResponse.setMessage("apposto");
+		apiResponse.setData(registrationResponse);
+		return apiResponse;
+
 	}
 	 
 }
