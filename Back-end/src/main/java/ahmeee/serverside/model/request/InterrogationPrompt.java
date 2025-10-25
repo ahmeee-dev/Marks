@@ -1,95 +1,106 @@
 package ahmeee.serverside.model.request;
 
+import java.util.ArrayList;
+
+  //set json representations
 public class InterrogationPrompt {
-
-    private String language;
-    private String task;
-    private String context;
-    private String expectedOutput;
-    private String inputStructure; // opzionale: per descrivere struttura JSON input
-    private String outputRules;    // opzionale: regole di formattazione output
-	private InterrogationRequest createInterrogationRequest;
-
-    public InterrogationRequest getCreateInterrogationRequest() {
-		return createInterrogationRequest;
-	}
-
-	public void setCreateInterrogationRequest(InterrogationRequest createInterrogationRequest) {
-		this.createInterrogationRequest = createInterrogationRequest;
-	}
-
-	public InterrogationPrompt() {}
-
-    public InterrogationPrompt(String language, String task, String context, String expectedOutput,
-                         String inputStructure, String outputRules, InterrogationRequest createInterrogationRequest) {
-        this.language = language;
-        this.task = task;
-        this.context = context;
-        this.expectedOutput = expectedOutput;
-        this.inputStructure = inputStructure;
-        this.outputRules = outputRules;
-        this.createInterrogationRequest = createInterrogationRequest;
+    private String prompt;
+    private InterrogationInput interrogationInput;
+    private String output;
+    
+    public String getPrompt() {
+        return prompt;
     }
 
-    // getter e setter
-    public String getLanguage() { return language; }
-    public void setLanguage(String language) { this.language = language; }
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
 
-    public String getTask() { return task; }
-    public void setTask(String task) { this.task = task; }
+    public InterrogationInput getInput() {
+        return interrogationInput;
+    }
 
-    public String getContext() { return context; }
-    public void setContext(String context) { this.context = context; }
+    public void setInput(InterrogationInput interrogationInput) {
+        this.interrogationInput = interrogationInput;
+    }
 
-    public String getExpectedOutput() { return expectedOutput; }
-    public void setExpectedOutput(String expectedOutput) { this.expectedOutput = expectedOutput; }
+    public String getOutput() {
+        return output;
+    }
 
-    public String getInputStructure() { return inputStructure; }
-    public void setInputStructure(String inputStructure) { this.inputStructure = inputStructure; }
+    public void setOutput(String output) {
+        this.output = output;
+    }
 
-    public String getOutputRules() { return outputRules; }
-    public void setOutputRules(String outputRules) { this.outputRules = outputRules; }
+    public InterrogationPrompt() {}
 
-    public static InterrogationPrompt createInterrogationPrompt(InterrogationRequest createInterrogationRequest) {
-        String language = "italian";
-        String task = "Analizza porzioni di interrogazioni orali e valuta la qualità.";
-        String context = """
-Sei un modello linguistico che analizza porzioni di interrogazioni orali di studenti in lingua italiana.
-Riceverai informazioni che descrivono il contesto dell’interrogazione e la porzione attuale da valutare.
-Il tuo compito è analizzare il contenuto ricevuto e restituire **esclusivamente** un oggetto JSON conforme alla struttura specificata.
-Rispondi esclusivamente con l’oggetto JSON, senza aggiungere backticks o formattazione Markdown.
-""";
-        String expectedOutput = """
+ 
+        public static InterrogationPrompt createInterrogationPrompt(InterrogationInput interrogationInput) {
+            String prompt = """
+Agisci come un assistente intelligente per interrogazioni orali automatizzate.
+Il tuo compito è:
+
+1. Analizzare la risposta precedente in base all’argomento e alle impostazioni.
+2. Generare una nuova domanda coerente con la difficoltà scelta, diversa da tutte quelle presenti in `previous_list`.
+3. Restituire un output JSON con la struttura specificata sotto.
+
+Valutazione della risposta precedente (`previous`):
+
+* Assegna un voto (`grade`) compreso tra 4 e 10.
+
+  * Una risposta corretta al 100% corrisponde a 9.
+  * Il 10 si assegna solo se la risposta è eccellente per completezza, chiarezza e approfondimento.
+* La valutazione deve essere coerente con la difficoltà (`settings.difficulty`):
+
+  * difficoltà 1 → aspettativa di voto 6–7
+  * difficoltà 2 → aspettativa di voto 7–8
+  * difficoltà 3 → aspettativa di voto 8–9
+  * difficoltà 4 → aspettativa di voto 9–10
+* Se la risposta contiene errori concettuali, inserisci un riassunto dell’errore (massimo 10 parole) nel campo `"annotation"`.
+  Se non vi sono errori, lascia `"annotation"` vuoto.
+* Se `settings.exposition_judgement` è `true`, valuta anche la chiarezza espositiva:
+
+  * Se carente, scrivi la forma corretta o migliorata in `"exposition_annotation"`.
+  * Se adeguata o disattivata, lascia `"exposition_annotation"` vuoto.
+
+Generazione della nuova domanda (`new`):
+
+* Crea una nuova domanda attinente allo stesso `argument`.
+* La difficoltà della domanda deve rispecchiare `settings.difficulty`, con un incremento graduale se le risposte precedenti sono state buone.
+* La nuova domanda deve essere esplicitamente diversa da tutte le domande presenti in `previous_list`, anche nella sintesi.
+* Includi una sintesi di circa 4 parole nel campo `"new_question_synthesis"`.
+
+Regole:
+* Non spiegare le scelte effettuate.
+* Non aggiungere testo o commenti fuori dal JSON.
+* Mantieni un linguaggio naturale, preciso e didattico.
+* Rispetta rigorosamente la struttura JSON indicata.
+
+Formato dell’output:
+L’output deve essere un JSON valido, senza testo aggiuntivo, con questa struttura esatta:
+
+                    """;
+
+            String output = """
 {
-    "cutoff": "Porzione di contenuto interrotta o incompleta da integrare nella prossima richiesta. Se non c’è alcuna interruzione, lascia stringa vuota.",
-    "grade": "Voto numerico da 4 a 10 che valuta la validità complessiva della risposta in relazione alla difficoltà prevista.",
-    "annotations": "Campo opzionale. Inseriscilo solo se il voto è minore di 7. Sintetizza in massimo 7 parole cosa è errato o come migliorare la risposta. Per difficoltà alte valuta anche la precisione terminologica; per difficoltà basse sii più tollerante.",
-    "synthesis": "Sintesi proporzionata e fluida che integri la sintesi precedente con il nuovo contenuto analizzato, mantenendo coerenza e continuità."
-}
-""";
-        String inputStructure = """
-{
-    "text_attributes": {
-        "argument": "Argomento specifico dell’interrogazione.",
-        "synthesis": "Sintesi cumulativa del contenuto trattato fino a ora.",
-        "trimmed": "Porzione troncata dall’input precedente da integrare con il contenuto corrente.",
-        "content": "Porzione effettiva di interrogazione da analizzare."
+    "new": {
+        "new_question": "nuova domanda basata su argument",
+        "new_question_synthesis": "sintesi di circa 4 parole"
     },
-    "grade_attributes": {
-        "grade": voto totalizzato fino ad ora,
-        "quantity": quantità di voti
-    },
-    "settings": {
-        "difficulty": difficoltà selezionata (1-4, dove 1 → aspettativa 6-7, 2 → 7-8, ecc.)
+    "previous": {
+    "grade": numero_da_4_a_10,
+    "annotation": "errore concettuale in max 10 parole o stringa vuota",
+    "exposition_annotation": "correzione forma se attiva, altrimenti stringa vuota"
     }
 }
-""";
-        String outputRules = """
-* Restituisci solo il JSON, senza testo aggiuntivo, spiegazioni o commenti.
-* Il JSON deve essere ben formato e valido.
-* Valuta correttezza concettuale, coerenza con l’argomento, completezza e qualità lessicale in base alla difficoltà.
-""";
+            """;
+            InterrogationPrompt result = new InterrogationPrompt();
+            result.setInput(interrogationInput);
+            result.setPrompt(prompt);
+            result.setOutput(output);
+            return result;
+        }
 
-        return new InterrogationPrompt(language, task, context, expectedOutput, inputStructure, outputRules, createInterrogationRequest);
-    }
 }
+
+
