@@ -2,9 +2,13 @@ package ahmeee.serverside.model.request;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+//add to the prompt a disclaimer for misinterpreted words or lines
   //set json representations
 public class InterrogationPrompt {
     private String prompt;
+    @JsonProperty("interrogation_input")
     private InterrogationInput interrogationInput;
     private String output;
     
@@ -83,7 +87,7 @@ L’output deve essere un JSON valido, senza testo aggiuntivo, con questa strutt
 
             String output = """
 {
-    "new": {
+    "new_content": {
         "new_question": "nuova domanda basata su argument",
         "new_question_synthesis": "sintesi di circa 4 parole"
     },

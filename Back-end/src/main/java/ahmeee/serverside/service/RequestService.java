@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ahmeee.serverside.model.UserPrincipal;
 import ahmeee.serverside.model.response.ApiResponse;
-import ahmeee.serverside.model.response.InterrogationResponse;
+import ahmeee.serverside.model.response.InterrogationOutput;
 import ahmeee.serverside.utils.SignatureUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -52,9 +52,9 @@ public class RequestService {
 		return (Math.abs((now - requestTimeStamp)) < 60);
 	}
 
-	public ApiResponse<InterrogationResponse> handleInterrogation(String requestBody) {
-		InterrogationResponse interrogationResponse = interrogationService.handleInterrogation(requestBody);
-		ApiResponse<InterrogationResponse> apiResponse = new ApiResponse<>();
+	public ApiResponse<InterrogationOutput> handleInterrogation(String requestBody) {
+		InterrogationOutput interrogationResponse = interrogationService.handleInterrogation(requestBody);
+		ApiResponse<InterrogationOutput> apiResponse = new ApiResponse<>();
 		if (interrogationResponse == null) {
 			apiResponse.setData(null);
 			apiResponse.setStatus(400);

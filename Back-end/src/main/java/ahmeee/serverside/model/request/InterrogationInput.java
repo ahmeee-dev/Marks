@@ -2,16 +2,20 @@ package ahmeee.serverside.model.request;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class InterrogationInput {
     private String argument;
     private Settings settings;
     private Last last;
+    @JsonProperty("previous_list")
     private ArrayList<PreviousList> previousList;
 
     public InterrogationInput() {}
 
     public class Settings {
         private Integer difficulty;
+        @JsonProperty("exposition_judgement")
         private boolean expositionJudgement;
 
         public Settings() {}

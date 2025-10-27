@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import ahmeee.serverside.model.response.ApiResponse;
-import ahmeee.serverside.model.response.InterrogationResponse;
+import ahmeee.serverside.model.response.InterrogationOutput;
 import ahmeee.serverside.service.RequestService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,13 +23,13 @@ public class RequestController {
 	public ApiResponse interrogation(@RequestHeader Map<String, String> header, @RequestBody String body, HttpServletRequest request) {
 
 		if (!service.isAuthentic(header, body, request)) {
-			ApiResponse<InterrogationResponse> apiResponse = new ApiResponse<>();
+			ApiResponse<InterrogationOutput> apiResponse = new ApiResponse<>();
 			apiResponse.setStatus(401);
 			apiResponse.setMessage("invalid request");
 			apiResponse.setData(null);
 			return apiResponse;
 		}
-		ApiResponse<InterrogationResponse> apiResponse = service.handleInterrogation(body);		
+		ApiResponse<InterrogationOutput> apiResponse = service.handleInterrogation(body);		
 		return apiResponse;
 	}
 
