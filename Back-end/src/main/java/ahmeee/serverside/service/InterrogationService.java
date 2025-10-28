@@ -1,18 +1,24 @@
 package ahmeee.serverside.service;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.cloud.speech.v1.RecognitionAudio;
+import com.google.cloud.speech.v1.RecognitionConfig;
+import com.google.cloud.speech.v1.RecognitionConfig.AudioEncoding;
+import com.google.cloud.speech.v1.RecognizeResponse;
+import com.google.cloud.speech.v1.SpeechRecognitionResult;
+import com.google.cloud.speech.v2.SpeechClient;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
 
 import ahmeee.serverside.model.SessionState;
-import ahmeee.serverside.model.request.InterrogationInput;
 import ahmeee.serverside.model.request.prompts.FirstQuestionPrompt;
-import ahmeee.serverside.model.request.prompts.InterrogationPrompt;
 import ahmeee.serverside.model.response.FirstQuestionResponse;
 import ahmeee.serverside.model.response.InterrogationOutput;
 
@@ -35,25 +41,9 @@ public class InterrogationService {
 
 	public InterrogationOutput handleInterrogation(String requestString) {
 
+		//file già creato pronto per venir scritto
 
-		try {
-
-			InterrogationInput interrogationInput = mapper.readValue(requestString, InterrogationInput.class);
-			InterrogationPrompt interrogationPrompt = InterrogationPrompt.createInterrogationPrompt(interrogationInput);
-
-			String prompt = mapper.writeValueAsString(interrogationPrompt);
-			
-			GenerateContentResponse response = client.models.generateContent(MODEL, prompt,null);
-			String outputString = response.text();
-			outputString = outputString
-			.replaceAll("(?s)```json", "")
-			.replaceAll("(?s)```", "")
-			.trim();
-			System.out.println(outputString);
-			InterrogationOutput outputJson = mapper.readValue(outputString, InterrogationOutput.class);
-
-			return outputJson;
-		} catch (JsonProcessingException err) { System.out.print("Error generating answer" + err.getMessage()); return null; }
+		return null;
 	}
 
 	public FirstQuestionResponse handleFirstQuestion(JsonNode json, SessionState state) throws JsonProcessingException {
@@ -73,6 +63,21 @@ public class InterrogationService {
 		FirstQuestionResponse firstQuestionResponse = mapper.readValue(response, FirstQuestionResponse.class);
 
 		return firstQuestionResponse;
+	}
+
+	public void handleChunking(SessionState state) throws IOException {
+		if (state.getChunksNumber()%60 == 0) {
+			try (SpeechClient speechClient = SpeechClient.create()) {
+				String uri = state.getFileObj().getAbsolutePath();
+				RecognitionConfig config = RecognitionConfig.newBuilder()
+					.setEncoding(AudioEncoding.LINEAR16)
+					.setSampleRateHertz(16000)
+					.build();
+				RecognitionAudio audio = RecognitionAudio.newBuilder().setUri(uri).build();
+
+				Respo
+			}
+		}
 	}
 
 }

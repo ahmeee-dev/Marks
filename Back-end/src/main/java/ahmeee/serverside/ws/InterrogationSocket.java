@@ -1,7 +1,6 @@
 package ahmeee.serverside.ws;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,8 +10,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ahmeee.serverside.model.SessionState;
-import ahmeee.serverside.model.request.prompts.FirstQuestionPrompt;
 import ahmeee.serverside.model.response.FirstQuestionResponse;
+import ahmeee.serverside.service.FileService;
 import ahmeee.serverside.service.InterrogationService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -33,6 +32,9 @@ public class InterrogationSocket {
     @Autowired
     public InterrogationService interrogationService;
 
+    @Autowired
+    public FileService fileService;
+
     private static Map<Session, SessionState> sessions = new ConcurrentHashMap<>();
 
     @OnOpen
@@ -50,18 +52,25 @@ public class InterrogationSocket {
 
             switch (type) {
                 case "init":
+                //json atteso con argument, difficulty, language_evaluation 
                     FirstQuestionResponse firstQuestionResponse = interrogationService.handleFirstQuestion(json, state);
                     String response = mapper.writeValueAsString(firstQuestionResponse);
                     session.getAsyncRemote().sendText(response);
+                    fileService.createFile(state, session);
                     break;
 
                 case "audio_chunk":
-                    String chunkBase64 = json.get("chunk").asText();
-                    state.addAudioChunk(Base64.getDecoder().decode(chunkBase64));
+                //json atteso con sequenza di bytes encoded in base64 e info sulla sequenza stessa
+
+                    String econdedChunk = json.get("chunk").asText();
+                    fileService.appendChunk(econdedChunk, state);
+                    //interrogationService.hanldeChunking()
+                    interrogationService.handleChunking(state);
                     break;
 
                 case "response_done":
                     // processa audio accumulato e invia feedback
+                    // svuota il file, azzera il chunkscounter, svuota la stringa answer
                     Feedback feedback = processResponse(state);
                     sendFeedback(session, feedback);
                     break;

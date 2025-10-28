@@ -18,7 +18,7 @@ import ahmeee.serverside.repository.UserRepo;
 @Service
 public class UserService {
 
-	final long HOUR = 60L * 60 * 1000;
+	//final long HOUR = 60L * 60 * 1000;
 	final long MONTH = 30L * 24 * 60 * 60 * 1000;
 	final int MAX_DAYS_TO_EXPIRATION = 20;
 	final int TOKEN_VALIDITY = 3;
@@ -37,7 +37,7 @@ public class UserService {
 
 	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-	//TODO: check if username or email is already taken
+	//TODO: handle if username or email is already taken
 	public LoginResponse register(Users user) {
 		if (user == null)
 			return (null);
