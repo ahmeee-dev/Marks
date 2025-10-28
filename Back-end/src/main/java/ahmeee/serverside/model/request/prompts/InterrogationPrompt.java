@@ -1,8 +1,8 @@
-package ahmeee.serverside.model.request;
-
-import java.util.ArrayList;
+package ahmeee.serverside.model.request.prompts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import ahmeee.serverside.model.request.InterrogationInput;
 
 //add to the prompt a disclaimer for misinterpreted words or lines
   //set json representations

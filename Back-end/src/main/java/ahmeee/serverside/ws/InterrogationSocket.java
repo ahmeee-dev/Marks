@@ -5,14 +5,19 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ahmeee.serverside.model.SessionState;
+import ahmeee.serverside.model.request.prompts.FirstQuestionPrompt;
+import ahmeee.serverside.model.response.FirstQuestionResponse;
+import ahmeee.serverside.service.InterrogationService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
 /* 
@@ -24,6 +29,9 @@ import jakarta.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/ws")
 public class InterrogationSocket {
+
+    @Autowired
+    public InterrogationService interrogationService;
 
     private static Map<Session, SessionState> sessions = new ConcurrentHashMap<>();
 
@@ -40,12 +48,11 @@ public class InterrogationSocket {
             String type = json.get("type").asText();
             SessionState state = sessions.get(session);
 
-            switch(type) {
+            switch (type) {
                 case "init":
-                    String argument = json.get("argument").asText();
-                    state.setArgument(argument);
-                    // manda prima domanda
-                    sendQuestion(session, state);
+                    FirstQuestionResponse firstQuestionResponse = interrogationService.handleFirstQuestion(json, state);
+                    String response = mapper.writeValueAsString(firstQuestionResponse);
+                    session.getAsyncRemote().sendText(response);
                     break;
 
                 case "audio_chunk":
@@ -73,5 +80,5 @@ public class InterrogationSocket {
         sessions.remove(session);
     }
 
-    
+
 }
