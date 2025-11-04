@@ -81,7 +81,7 @@ public class InterrogationSocket {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
     }
 
     @OnClose

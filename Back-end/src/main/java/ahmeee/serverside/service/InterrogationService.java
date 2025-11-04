@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.speech.v1.RecognitionAudio;
 import com.google.cloud.speech.v1.RecognitionConfig;
 import com.google.cloud.speech.v1.RecognitionConfig.AudioEncoding;
-import com.google.cloud.speech.v1.RecognizeResponse;
-import com.google.cloud.speech.v1.SpeechRecognitionResult;
 import com.google.cloud.speech.v2.SpeechClient;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
@@ -75,7 +73,9 @@ public class InterrogationService {
 					.build();
 				RecognitionAudio audio = RecognitionAudio.newBuilder().setUri(uri).build();
 
-				Respo
+				//mandalo a google per ottenere il testo trascritto (parziale) 
+				//controlla come inviare la richiesta una volta creato il builder e inserito l'uri del file in cui hai salvato
+				//aggiungi il risultato ottenuto da google alla string che verrà poi inviata a Gemini, poi svuota il file del suo contenuto
 			}
 		}
 	}
