@@ -5,81 +5,156 @@
 .env
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
 
 # --------------------
-# Java / Spring Boot (Backend)
+# Python
 # --------------------
-# Compiled class files
-*.class
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Log files
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
 *.log
-logs/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 
-# Maven/Gradle
-/target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Flask stuff:
+instance/
+.webassets-cache
 
-# Package files
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
+# Scrapy stuff:
+.scrapy
 
-# IDE specific files
-.metadata
-!.gitignore
-/bin/
+# Sphinx documentation
+docs/_build/
 
-# Spring Boot-specific
-/build/
-/out/
+# PyBuilder
+target/
 
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# --------------------
 # Database files
+# --------------------
 *.db
 *.sqlite
+*.sqlite3
 /data/
-
-# --------------------
-# React Native / Expo (Frontend)
-# --------------------
-/node_modules
-/android
-/ios
-/web-build
-.expo/
-# Expo Go cache and build files
-.expo-shared/
-app.json
-expo-shared.json
-npm-debug.*
-yarn-error.*
-.packager/
-metro.config.js.orig
-# Build artifacts
-/dist/
-/temp/
 
 # --------------------
 # Docker
 # --------------------
-# Ignore Docker build context
 .dockerignore
-
-# Generated files like volumes
 docker-compose.override.yml
 docker-compose.local.yml
 
 # --------------------
-# Environment/Secrets (Crucial for API Keys)
+# Environment/Secrets
 # --------------------
-# Configuration files with secrets
-application.properties
-application-dev.properties
-application-prod.properties
-
-# IMPORTANT: Remove secrets file if present and use environment variables
+.env
+.env.local
 /secrets/
+config.ini
+config.yaml

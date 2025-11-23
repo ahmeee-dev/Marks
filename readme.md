@@ -1,3 +1,7 @@
+# Current Status: 
+Updating the backend from Java Spring Boot to Python FastAPI
+
+
 # Marks 
 
 *L'applicazione è in fase attiva di sviluppo. Questo Readme si basa sulla versione finale, fatta eccezione per la sezione 'Roadmap'.*
