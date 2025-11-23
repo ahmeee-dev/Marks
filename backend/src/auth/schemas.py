@@ -20,3 +20,6 @@ class LoginRequest(BaseModel):
 	username: str
 	password: str
 
+class EmailVerificationResponse(BaseModel):
+	messages: str
+	user_id: str
